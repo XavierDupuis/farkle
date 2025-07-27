@@ -1,0 +1,15 @@
+{
+  "name": "farkle",
+  "description": "",
+  "version": "1.0.0",
+  "author": "XavierDupuis",
+  "license": "MIT",
+  "scripts": {
+    "build": "npx tsc",
+    "start": "npm run build && node dist/main.js",
+    "simulate": "npx tsc && node dist/simulate.js"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  }
+}
