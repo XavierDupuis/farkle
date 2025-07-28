@@ -2,10 +2,15 @@ import { Player } from "./player";
 
 export class Game {
     private roundCount = 0;
-    private _remainingPointsToWin: number = this.pointsRequiredForWin;
+
+    private _bankedPoints = 0;
+    
+    public get bankedPoints(): number {
+        return this._bankedPoints;
+    }
 
     public get remainingPointsToWin(): number {
-        return this._remainingPointsToWin;
+        return this.pointsRequiredForWin - this.bankedPoints;
     }
 
     constructor(
@@ -17,9 +22,14 @@ export class Game {
         let hasPlayerWon = false;
         while (!hasPlayerWon) {
             this.roundCount++;
-            this._remainingPointsToWin = this.pointsRequiredForWin - this.player.points
-            this.player.playRound(this);
-            hasPlayerWon = this.hasPlayerWon(this.player.points)
+            const { hasWonRound, potentialPoints } = this.player.playRound(this);
+            if (hasWonRound) {
+                this._bankedPoints += potentialPoints;
+                console.log(`🟢 Player won ${potentialPoints} points (now ${this.bankedPoints})`)
+                hasPlayerWon = this.hasPlayerWon(this.bankedPoints);
+            } else {
+                console.log(`🔴 Player lost round (${potentialPoints})`)
+            }
         }
         console.log(`🔵 Player won after ${this.roundCount} rounds`)
         return this.roundCount;
