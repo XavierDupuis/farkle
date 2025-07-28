@@ -23,7 +23,11 @@ export class Round {
         ]),
     }
 
-    private wildFaces = new Set<number>();
+    private _wildFaces = new Set<number>();
+    
+    public get wildFaces(): Set<number> {
+        return new Set([...this._wildFaces]);
+    }
 
     private _potentialPoints = 0;
 
@@ -46,7 +50,7 @@ export class Round {
             const duplicates = this.getDuplicates(occurencesOfDiceFaces);
             if (duplicates.length) {
                 for (const duplicate of duplicates) {
-                    this.wildFaces.add(duplicate);
+                    this._wildFaces.add(duplicate);
                     const currentOccurenceOfDuplicate = occurencesOfDiceFaces.get(duplicate) || 0;
                     const balancedOccurenceOfDuplicate = currentOccurenceOfDuplicate - (Round.duplicatesCountToWild - 1);
                     occurencesOfDiceFaces.set(duplicate, balancedOccurenceOfDuplicate);
@@ -71,7 +75,7 @@ export class Round {
     private getRollResults(occurencesOfDiceFaces: Map<number, number>): { rollPoints: number, remainingDiceToRoll: number } {
         let rollPoints = 0;
         for (const [face, occurence] of occurencesOfDiceFaces) {
-            const isFaceWild = this.wildFaces.has(face);
+            const isFaceWild = this._wildFaces.has(face);
             const faceValue = (isFaceWild ? Round.pointsByDiceFace.wild : Round.pointsByDiceFace.normal).get(face) ?? 0;
             const faceValues = faceValue * occurence;
             if (faceValues > 0) {
