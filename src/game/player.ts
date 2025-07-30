@@ -20,7 +20,18 @@ export class Player {
         } while (willRoll);
 
         const hasWonRound = canContinueRolling;
+        if (!hasWonRound) {
+            return { hasWonRound: false, potentialPoints: 0 };
+        }
+
         const potentialPoints = round.potentialPoints;
+
+        const hasToOpen = game.bankedPoints < game.pointsRequiredToOpen;
+        const willOpen = potentialPoints > game.pointsRequiredToOpen;
+        if (hasToOpen && !willOpen) {
+            return { hasWonRound: false, potentialPoints: 0 };
+        }
+
         return { hasWonRound, potentialPoints };
     }
 }
