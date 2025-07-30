@@ -14,8 +14,9 @@ export class Game {
     }
 
     constructor(
-        private player: Player,
-        private pointsRequiredForWin: number = 10000
+        private readonly player: Player,
+        public readonly pointsRequiredForWin: number = 10000,
+        public readonly pointsRequiredToOpen: number = 1000
     ) {}
 
     public start(): number {
